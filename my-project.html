@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- 【修改这里：浏览器标签页标题】 -->
+  <title>Xiao — Portfolio & Writing</title>
+
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 引入 Google Fonts：统一西文 Lora 衬线 + 中文思源宋体 (Noto Serif SC) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    /* 全站统一衬线字体栈 */
+    body {
+      font-family: 'Lora', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, Georgia, serif;
+      background-color: #FAF8F5; /* 暖纸张底色 */
+      color: #2D2A26;
+    }
+    
+    .font-mono-meta {
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* 荧光笔划重点 */
+    .highlight {
+      background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 0.7) 2.4%, rgba(254, 240, 138, 0.5) 98%);
+      padding: 0.1em 0.3em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-stone-900">
+
+  <!-- ========================================== -->
+  <!-- 1. 顶部：占满整个横屏、置顶左上角的大 Header -->
+  <!-- ========================================== -->
+  <header class="w-full border-b border-stone-200/80 px-6 sm:px-12 lg:px-16 py-10 bg-[#FAF8F5]">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      
+      <!-- 左上角主体：头像 + 姓名 + 身份（全衬线字体） -->
+      <div class="flex items-center space-x-6 sm:space-x-8">
+        <!-- 【修改这里：头像图片】 -->
+        <img 
+          class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-sm grayscale hover:grayscale-0 transition-all duration-300" 
+          src="images/avatar.jpg" 
+          alt="Xiao"
+        >
+        <div>
+          <!-- 【修改这里：姓名】 -->
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-stone-900">
+            Xiao
+          </h1>
+          <!-- 【修改这里：身份标签】 -->
+          <p class="text-sm text-stone-500 mt-2 font-normal">
+            科技记者 / 信息可视化 / Tech for good 
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. 主体宽屏区域 (对齐容器) -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-6xl mx-auto px-6 sm:px-12 lg:px-16 py-14 flex-grow">
+
+    <!-- 个人介绍 Bio：已调整为与下方作品集宽度严格对齐 -->
+    <section class="w-full mb-16">
+      <!-- 【修改这里：个人介绍内容】 -->
+      <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-normal">
+        你好，我是 Xiao。关注<span class="highlight text-stone-900 font-medium">科技向善、技术伦理与社会影响</span>。
+        曾在欧洲学习数字媒体批判，喜欢做数据分析和视觉故事表达，相信叙事的力量。
+      </p>
+    </section>
+
+    <!-- 特殊字符分隔符 -->
+    <div class="flex items-center justify-between border-b border-stone-200 pb-4 mb-8">
+      <div class="font-mono-meta text-xs tracking-widest text-stone-400 uppercase">
+        作品
+      </div>
+      <div class="font-mono-meta text-xs text-stone-400">
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. 作品列表 -->
+    <!-- ========================================== -->
+    <section class="divide-y divide-stone-200/70">
+
+      <!-- ===== 文章 1 ===== -->
+       <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://mp.weixin.qq.com/s/GC2GMyILdu1h9U4Wq_3Nkg" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2023/06</span>
+              <!-- 【修改这里：标签 1】（陶土红） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#FBF0EA] text-[#C85A32] font-medium border border-[#F4DDD2]">
+                #数据新闻
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 1】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover:transition-colors duration-200 leading-snug">
+                拆解“猛兽”：102个案例里的网暴
+              </h2>
+              <!-- 【修改这里：简介 1】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                我们搜集了2021年1月1日至今年6月8日期间，报道热度较高的102个网暴案例并进行逐帧拆解，总结出了11种网暴言论逻辑。我主要负责“网暴言论”和“维权难”两个部分的数据收集、编码以及文案撰写。
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
+      <!-- ===== 文章 2 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://www.21jingji.com/article/20240812/herald/9cb49bd392174f35e7701cf5782c1c1c.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2024/08</span>
+              <!-- 【修改这里：标签 2】（鼠尾草绿） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EEF4F0] text-[#3D6950] font-medium border border-[#D7E5DC]">
+                #深度报道
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 2】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                “体育饭圈”整治进行时：饭圈何以成为众矢之的？
+              </h2>
+              <!-- 【修改这里：简介 2】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                独立采访体育行业经纪人、饭圈文化研究学者、明星反黑组粉丝。饭圈是许多偏激言论的起始点，理解它的组织肌理和生长逻辑，才能理解争议源头。
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
+      <!-- ===== 文章 3 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://m.sfccn.com/2023/12-11/xMMDE0NDlfMTg4MTcxMg.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2023.11</span>
+              <!-- 【修改这里：标签 3】（复古暖姜黄） -->
+               <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EEF4F0] text-[#3D6950] font-medium border border-[#D7E5DC]">
+                #深度报道
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 3】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover:transition-colors duration-200 leading-snug">
+                微信群里的PDF罪状录：吃瓜与恶的距离
+              </h2>
+              <!-- 【修改这里：简介 3】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                道德审判可以彰显自己的正义感，一旦人们找到了共同愤怒的群体，很容易让某些敏感信息的披露演变为一场网暴，吃瓜pdf文件正是一类缩影。我用了一个星期时间，通过telegram找到了一位海外瓜群组长，在他的复杂心态里看到了吃瓜文件的更多问题。
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
+      <!-- ===== 文章 4 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://www.21jingji.com/article/20241129/herald/7e6e5cafc13c692b452ba1dafb7d897a.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2024.11</span>
+              <!-- 【修改这里：标签 4】（干枯玫瑰粉） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#FBF0F2] text-[#9E3E53] font-medium border border-[#F4DBE1]">
+                #解释性报道
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 4】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                热搜上线第十年，为何争议仍不止不休？
+              </h2>
+              <!-- 【修改这里：简介 4】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                从心理学的角度来看，人类为了生存，有需要感知威胁、躲避危险的天性，这种“人性弱点”体现在社交平台上，便是暗含危险、愤怒的负性信息更容易获得公开互动。但语言暴力的边界难以界定，针对具体问题建立人工管理员或投票机制，也许是一种方法。
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
+      <!-- ===== 文章 5 ===== -->
+       <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://m.21jingji.com/article/20260730/herald/c56587b007bd5740134b2699ba86fbd1.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2026.7</span>
+              <!-- 【修改这里：标签 5】（复古雾霾蓝） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EFF5F7] text-[#2F677A] font-medium border border-[#DAE8ED]">
+                #政策解读
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 5】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                反网络暴力法终于要来了，处罚最高可达一千万元
+              </h2>
+              <!-- 【修改这里：简介 5】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                反网暴法用了较大篇幅明确网络平台（“网络服务提供者”）在治理网络暴力中的责任，我们梳理了5点。不过在实践中，对于评论、转发的公开场景，多数平台仍未提供便捷的取证工具。如果需要进一步调取涉事账号信息、传播路径等数据，也缺少专门的操作入口。
+
+
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 4. 底部 Footer（宽度对齐作品集、内容居中） -->
+  <!-- ========================================== -->
+  <footer class="w-full border-t border-stone-200/80 py-12 px-6 sm:px-12 lg:px-16 bg-[#FAF8F5]">
+    <div class="max-w-6xl mx-auto text-center text-xs text-stone-400 font-mono-meta tracking-wide">
+      built by <span class="text-stone-700 font-medium">xiao</span>, 
+      <span class="text-[#C85A32] font-medium">cats 🐾</span> and 
+      <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-medium">gemini AI</span>.
+    </div>
+  </footer>
+
+</body>
+</html>
