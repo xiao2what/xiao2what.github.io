@@ -1,523 +1,301 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIAO - Tech Journalist</title>
-    <style>
-        /* ================= 视觉基调 (Zine 杂志风) ================= */
-        :root {
-            --bg-color: #FBF8F1;       /* 燕麦暖米色 (复古纸张) */
-            --text-main: #1A1A1A;      /* 炭黑色 (油墨感) */
-            --text-desc: #4A4A4A;      /* 深灰色 (正文导语) */
-            --accent-color: #E55C3E;   /* 赤陶橙 (Kontinentalist 前卫跳色) */
-            --line-color: #1A1A1A;     /* 粗实线颜色 */
-            --line-light: #D3CEC4;     /* 浅色虚线颜色 */
-            
-            /* 字体组合 */
-            --font-serif: "Noto Serif SC", "Songti SC", "STSong", "Georgia", "Times New Roman", serif;
-            --font-sans: "Helvetica Neue", Arial, sans-serif;
-            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- 【修改这里：浏览器标签页标题】 -->
+  <title>Xiao — Portfolio & Writing</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: var(--bg-color); color: var(--text-main); 
-            font-family: var(--font-sans); -webkit-font-smoothing: antialiased; 
-            overflow-x: hidden; 
-        }
-        html { scroll-behavior: smooth; }
-        a { text-decoration: none; color: inherit; }
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- 引入 Google Fonts：统一西文 Lora 衬线 + 中文思源宋体 (Noto Serif SC) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
 
-        /* ================= 前卫悬浮胶囊导航 ================= */
-        .capsule-nav {
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-            background: rgba(251, 248, 241, 0.85); backdrop-filter: blur(15px);
-            border: 1px solid rgba(26, 26, 26, 0.1); border-radius: 50px;
-            display: flex; align-items: center; padding: 8px 12px; gap: 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 1000;
-        }
-        .nav-avatar {
-            width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
-            border: 1px solid var(--text-main); margin-right: 10px;
-        }
-        .capsule-nav a {
-            font-size: 0.9rem; font-weight: 600; padding: 8px 16px; 
-            border-radius: 30px; transition: all 0.3s ease;
-        }
-        .capsule-nav a:hover { color: var(--accent-color); }
-        /* 选中状态：倾斜赤陶橙色块 */
-        .capsule-nav a.active {
-            background-color: var(--accent-color); color: var(--bg-color);
-            transform: skewX(-8deg); /* 前卫倾斜效果 */
-        }
-        .capsule-nav a.active span { display: inline-block; transform: skewX(8deg); /* 文字反向回正 */ }
+  <style>
+    /* 全站统一衬线字体栈 */
+    body {
+      font-family: 'Lora', 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', SimSun, Georgia, serif;
+      background-color: #FAF8F5; /* 暖纸张底色 */
+      color: #2D2A26;
+    }
+    
+    .font-mono-meta {
+      font-family: 'Space Mono', monospace;
+    }
 
-        /* ================= 跑马灯 (新闻播报条) ================= */
-        .marquee-container {
-            position: absolute; bottom: 40px; width: 100%;
-            border-top: 1px solid var(--text-main); border-bottom: 1px solid var(--text-main);
-            padding: 12px 0; overflow: hidden; white-space: nowrap;
-        }
-        .marquee-content {
-            display: inline-block; animation: marquee 20s linear infinite;
-            font-family: var(--font-mono); font-size: 1.1rem; font-weight: bold; letter-spacing: 2px;
-        }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* ================= 首屏 (纯排版海报) ================= */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; position: relative;
-        }
-       /* ================= 首屏 (纯排版海报) ================= */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; position: relative;
-        }
-        
-        /* 新增：横向排列头像与名字 */
-        .hero-title-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px; /* 头像和名字的间距 */
-            margin-bottom: 20px;
-        }
-
-        /* 新增：主页头像样式 */
-        .hero-avatar {
-            width: 120px; /* 尺寸与 8rem 字体高度近似 */
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--text-main); /* 杂志风深色粗描边 */
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        /* 让头像带有一点前卫的悬浮动态感 */
-        .hero-avatar:hover {
-            transform: rotate(-8deg) scale(1.05);
-        }
-
-        .hero h1 {
-            font-family: var(--font-serif); font-size: 8rem; font-weight: 900;
-            line-height: 1; letter-spacing: -2px; margin-bottom: 0; /* margin移至wrapper */
-        }
-        }
-        .hero p {
-            font-family: var(--font-mono); font-size: 1.1rem; letter-spacing: 1px;
-            margin-bottom: 60px; text-transform: uppercase;
-        }
-        .email-link {
-            font-size: 1.1rem; font-weight: 600; border-bottom: 2px solid var(--text-main);
-            padding-bottom: 4px; transition: all 0.3s;
-            display: inline-block; /* 👈 把邮箱变成块级元素，这样边距才会生效 */
-            margin-top: 30px; /* 👈 直接让邮箱往下走，数值越大，离上面的文字越远 */
-        }
-        .email-link:hover { color: var(--accent-color); border-color: var(--accent-color); }
-
-        /* ================= WIRED风 区块标题 ================= */
-        .section { padding: 80px 8%; max-width: 1400px; margin: 0 auto; }
-        .section-header {
-            border-top: 8px solid var(--line-color); /* 极其粗黑的压阵线条 */
-            padding-top: 20px; margin-bottom: 50px;
-            display: flex; justify-content: space-between; align-items: baseline;
-        }
-        .section-title { font-family: var(--font-serif); font-size: 3rem; font-weight: 800; }
-        .section-eng { font-family: var(--font-mono); font-size: 1rem; color: var(--text-desc); }
-
-        /* ================= 纯文字列表 (报纸目录排版) ================= */
-        .article-list { display: flex; flex-direction: column; }
-        .article-item {
-            display: flex; gap: 40px; padding: 45px 0;
-            border-bottom: 1px dashed var(--line-light); /* 虚线分割，透气感 */
-        }
-        
-        /* 左侧日期 */
-        .article-date {
-            flex: 0 0 120px; font-family: var(--font-mono); font-size: 1.1rem; 
-            color: var(--text-main); font-weight: bold; margin-top: 5px;
-        }
-        
-        /* 右侧正文 */
-        .article-content { flex: 1; max-width: 800px; }
-        
-        /* 超大标题 + 荧光笔交互 */
-        .article-title {
-            font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; 
-            line-height: 1.4; color: var(--text-main); display: inline;
-            /* 荧光笔效果的核心代码 */
-            background-image: linear-gradient(transparent 65%, var(--accent-color) 35%);
-            background-size: 0% 100%; background-repeat: no-repeat;
-            transition: background-size 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .article-item:hover .article-title { background-size: 100% 100%; cursor: pointer; }
-        
-        .article-desc {
-            font-size: 1rem; line-height: 1.7; color: var(--text-desc);
-            margin-top: 15px; text-align: justify;
-        }
-
-        /* ================= 瀑布流 (测评与白皮书) ================= */
-      .masonry-grid { 
-            column-count: 2; 
-            column-gap: 80px;  /* 👈 左右间距拉大一倍 */
-            max-width: 900px;  /* 👈 核心改动：限制这一块的总宽度，强制让图片缩得很小、很精致 */
-            margin: 0 auto;    /* 👈 保证图片网格整体在页面居中 */
-        }
-        .masonry-item {
-            break-inside: avoid; 
-            margin-bottom: 80px; /* 👈 上下间距也拉大，彻底告别拥挤 */
-            display: block;
-            transition: transform 0.3s ease;defxi
-        }
-        .masonry-item:hover { transform: translateY(-5px); }
-        .masonry-img { width: 100%; object-fit: cover; margin-bottom: 15px; filter: contrast(1.05); }
-        .masonry-date {
-            font-family: var(--font-mono); font-size: 0.95rem; font-weight: bold;
-            margin-bottom: 5px; display: block;
-        }
-        .masonry-title {
-            font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; line-height: 1.3;
-            /* 同样的荧光笔交互 */
-            display: inline; background-image: linear-gradient(transparent 65%, var(--accent-color) 35%);
-            background-size: 0% 100%; background-repeat: no-repeat; transition: background-size 0.3s;
-        }
-        .masonry-item:hover .masonry-title { background-size: 100% 100%; }
-
-/* ================= 页脚样式 ================= */
-        .site-footer {
-            display: flex;
-            justify-content: center; /* 确保文字在网页绝对正中间 */
-            width: 100%;
-            margin-top: 100px;    /* 👈 距离上方的白皮书区块留出 100px 的巨大空白 */
-            margin-bottom: 80px;  /* 👈 距离浏览器真正的最底部留出 80px 的空白 */
-            font-family: var(--font-mono); 
-            font-size: 0.85rem; 
-            color: var(--text-desc); 
-        }
-
-        /* ================= 手机端响应式 ================= */
-        @media (max-width: 900px) {
-.hero-title-wrapper { gap: 15px; }
-            .hero-avatar { width: 75px; height: 75px; border-width: 2px; }
-            /* 胶囊导航变底部滑动栏 */
-            .capsule-nav {
-                top: auto; bottom: 20px; width: 90%; justify-content: flex-start;
-                overflow-x: auto; padding: 10px; border-radius: 20px;
-            }
-            .nav-avatar { display: none; }
-            .capsule-nav a { white-space: nowrap; padding: 6px 12px; }
-            .marquee-container { bottom: 90px; }
-            
-            .hero h1 { font-size: 5rem; }
-            .section { padding: 60px 5%; }
-            .section-header { flex-direction: column; gap: 5px; border-top: 5px solid var(--line-color); }
-            
-            .article-item { flex-direction: column; gap: 10px; padding: 30px 0; }
-            .article-date { flex: none; font-size: 1rem; color: var(--accent-color); } /* 手机端日期高亮区分 */
-            .article-title { font-size: 1.5rem; }
-            .masonry-grid { column-count: 1; }
-        }
-    </style>
+    /* 荧光笔划重点 */
+    .highlight {
+      background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 0.7) 2.4%, rgba(254, 240, 138, 0.5) 98%);
+      padding: 0.1em 0.3em;
+      border-radius: 4px;
+    }
+  </style>
 </head>
-<body>
 
-    <!-- 导航栏 -->
-    <nav class="capsule-nav">
-        <!-- 🔴 替换说明：把下面 src 里的链接，替换成你真实的圆形头像链接 -->
-        <img src="images/avatar.png" class="nav-avatar">
-        
-        <a href="#home" class="active"><span>HOME</span></a>
-        <a href="#global"><span>监管</span></a>
-        <a href="#internet"><span>行业</span></a>
-        <a href="#ai"><span>技术</span></a>
-        <a href="#interviews"><span>智库专访</span></a>
-        <a href="#reports"><span>测评报告</span></a>
-    </nav>
+<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-stone-900">
 
-<!-- 首屏海报 -->
-    <section class="hero" id="home">
-        <!-- 🎯 新增的标题包裹器，让头像和文字横向对齐 -->
-        <div class="hero-title-wrapper">
-            <!-- 🔴 替换说明：在此放入你的真实头像链接 -->
-            <img src="images/avatar.png" class="hero-avatar">
-            <h1>XIAO.</h1>
+  <!-- ========================================== -->
+  <!-- 1. 顶部：占满整个横屏、置顶左上角的大 Header -->
+  <!-- ========================================== -->
+  <header class="w-full border-b border-stone-200/80 px-6 sm:px-12 lg:px-16 py-10 bg-[#FAF8F5]">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      
+      <!-- 左上角主体：头像 + 姓名 + 身份（全衬线字体） -->
+      <div class="flex items-center space-x-6 sm:space-x-8">
+        <!-- 【修改这里：头像图片】 -->
+        <img 
+          class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-sm grayscale hover:grayscale-0 transition-all duration-300" 
+          src="images/avatar.jpg" 
+          alt="Xiao"
+        >
+        <div>
+          <!-- 【修改这里：姓名】 -->
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-stone-900">
+            Xiao
+          </h1>
+          <!-- 【修改这里：身份标签】 -->
+          <p class="text-sm text-stone-500 mt-2 font-normal">
+            科技记者 / 信息可视化 / Tech for good 
+          </p>
         </div>
-        
-        <p>科技记者  / 信息可视化 / tech for good</p>
-        
-        <!-- 🔴 替换说明：换成你的邮箱 -->
-        <a href="mailto:xiao2.what@gmail.com" class="email-link">xiao2.what@gmail.com ↗</a>
-        
-        <!-- 新闻跑马灯 -->
-        <div class="marquee-container">
-            <div class="marquee-content">
-                +++ GLOBAL REGULATION +++ INTERNET LAW +++ AI GOVERNANCE +++ INTERVIEWS +++ DATA & REPORTS +++ GLOBAL REGULATION +++ INTERNET LAW +++ AI GOVERNANCE +++ INTERVIEWS +++ DATA & REPORTS +++
-            </div>
-        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. 主体宽屏区域 (对齐容器) -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-6xl mx-auto px-6 sm:px-12 lg:px-16 py-14 flex-grow">
+
+    <!-- 个人介绍 Bio：已调整为与下方作品集宽度严格对齐 -->
+    <section class="w-full mb-16">
+      <!-- 【修改这里：个人介绍内容】 -->
+      <p class="text-stone-700 text-base sm:text-lg leading-relaxed font-normal">
+        你好，我是 Xiao。关注<span class="highlight text-stone-900 font-medium">科技向善、技术伦理与社会影响</span>。
+        曾在欧洲学习数字媒体批判，喜欢做数据分析和视觉故事表达，相信叙事的力量。
+      </p>
     </section>
 
-    <!-- 1. 全球数字监管 (6篇) -->
-    <section class="section" id="global">
-        <div class="section-header">
-            <h2 class="section-title">全球数字监管</h2>
-            <span class="section-eng">GLOBAL REGULATION</span>
-        </div>
-        <div class="article-list">
+    <!-- 特殊字符分隔符 -->
+    <div class="flex items-center justify-between border-b border-stone-200 pb-4 mb-8">
+      <div class="font-mono-meta text-xs tracking-widest text-stone-400 uppercase">
+        作品
+      </div>
+      <div class="font-mono-meta text-xs text-stone-400">
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. 作品列表 -->
+    <!-- ========================================== -->
+    <section class="divide-y divide-stone-200/70">
+
+      <!-- ===== 文章 1 ===== -->
+       <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://mp.weixin.qq.com/s/GC2GMyILdu1h9U4Wq_3Nkg" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
             
-            <!-- 第 1 篇 -->
-            <div class="article-item">
-                <!-- 🔴 替换说明：替换发布日期 -->
-                <div class="article-date">2026.9</div>
-                <div class="article-content">
-                    <!-- 🔴 替换说明：替换 href="你的文章链接" 以及 a 标签中间的标题文字 -->
-                    <a href="https://m.21jingji.com/article/20260924/herald/e2d286ca2771b1a9690926ac3478621d.html" target="_blank" class="article-title">全球未成年人“社媒禁令”潮：难在哪？中国跟进了什么？</a>
-                    <!-- 🔴 替换说明：替换 100 字简介 -->
-                    <p class="article-desc">高频词逐渐从隐私保护，变为年龄验证、成瘾性设计和产品责任，这会是未来5～10年里全球数字监管的又一重点。</p>
-                </div>
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2023/06</span>
+              <!-- 【修改这里：标签 1】（陶土红） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#FBF0EA] text-[#C85A32] font-medium border border-[#F4DDD2]">
+                #数据新闻
+              </span>
             </div>
 
-            <!-- 第 2 篇 -->
-            <div class="article-item">
-                <div class="article-date">2026.6</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20260604/herald/8be1525d738f37ad82fb7f016b6803bf.html" target="_blank" class="article-title">Manus收购案“破产”后的对外投资时代</a>
-                    <p class="article-desc"> 过去的监管逻辑是事件驱动的：一笔投资发生，触发审查，审完放行或否决，监管关系基本结束。《新规》的逻辑是过程导向的：投资完成之后，企业在境外的经营行为、人员安排、数据处理方式都持续处于监管视野之内。 </p>
-                </div>
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 1】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover:transition-colors duration-200 leading-snug">
+                拆解“猛兽”：102个案例里的网暴
+              </h2>
+              <!-- 【修改这里：简介 1】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                我们搜集了2021年1月1日至今年6月8日期间，报道热度较高的102个网暴案例并进行逐帧拆解，总结出了11种网暴言论逻辑。我主要负责“网暴言论”和“维权难”两个部分的数据收集、编码以及文案撰写。
+              </p>
             </div>
 
-	<!-- 第 3 篇 (请继续替换下面3篇的内容) -->
-            <div class="article-item">
-                <div class="article-date">2025.11</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20251121/herald/ed4d1e8e6e0f820a9ba8c0c1cc227409.html" target="_blank" class="article-title">欧盟数字法要做“大减法”</a>
-                    <p class="article-desc"> 为了减少法律摩擦，同时稳住欧盟在美中夹击下的竞争力，欧盟委员会发布名为“Digital Omnibus”的一揽子数字法案简化方案，GDPR、DMA、DSA等诸多重要法规都面临精简。 </p>
-                </div>
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
             </div>
 
-            <!-- 第 4 篇  -->
-            <div class="article-item">
-                <div class="article-date">2024.05</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20240402/herald/45918661e9c457c6a2385c0c20d83adf.html" target="_blank" class="article-title">从谷歌罚单说起，回看最激烈的欧盟《版权指令》制定史</a>
-                    <p class="article-desc"> 这是欧盟在内容出版行业的利益确实被侵蚀的情况下，才做出的决定。知识产权与经济秩序紧密相关，产业发展状态很重要。 </p>
-                </div>
-            </div>
+          </div>
+        </a>
+      </article>
 
-        </div>
-    </section>
-
-    <!-- 2. 合规现状 (4篇) -->
-    <section class="section" id="internet">
-        <div class="section-header">
-            <h2 class="section-title">行业合规</h2>
-            <span class="section-eng">Industry Compliance</span>
-        </div>
-        <div class="article-list">
+      <!-- ===== 文章 2 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://www.21jingji.com/article/20240812/herald/9cb49bd392174f35e7701cf5782c1c1c.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
             
-<!-- 第 1 篇 -->
-            <div class="article-item">
-                <div class="article-date">2025.9</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20250904/herald/ce1753b0474be884a904a4c5aef8d53e.html" target="_blank" class="article-title">AI内容“持证上岗”，落地难题已经出现</a>
-                    <p class="article-desc">深度伪造和AI虚假信息事件频发，AI标识是非常重要的应对方法。但执行颗粒度存在差异，业内也发现了争议：只总结私域的AI功能，是否必须标识？AI智能客服在监管范围内吗？下游的社交平台，又该如何对待用户的AI创作？</p>
-                </div>
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2024/08</span>
+              <!-- 【修改这里：标签 2】（鼠尾草绿） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EEF4F0] text-[#3D6950] font-medium border border-[#D7E5DC]">
+                #深度报道
+              </span>
             </div>
 
-            <!-- 第 2 篇 -->
-            <div class="article-item">
-                <div class="article-date">2025.6</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20250621/herald/d73c6fb3e1729aadd896b8c53dbccb28.html" target="_blank" class="article-title">AI陪伴的尴尬境地：想走心，却很难不“擦边”</a>
-                    <p class="article-desc"> 根本问题是AI陪伴产品面临商业窘境。在所有情感需求中，荷尔蒙是最直接、最强烈的一项，因此也最容易吸引用户和激发付费冲动，但这显然不是最可持续的商业模式。 </p>
-                </div>
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 2】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                “体育饭圈”整治进行时：饭圈何以成为众矢之的？
+              </h2>
+              <!-- 【修改这里：简介 2】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                独立采访体育行业经纪人、饭圈文化研究学者、明星反黑组粉丝。饭圈是许多偏激言论的起始点，理解它的组织肌理和生长逻辑，才能理解争议源头。
+              </p>
             </div>
 
-            <!-- 第 3 篇 -->
-            <div class="article-item">
-                <div class="article-date">2024.11</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20240723/herald/eba149c1c6a53ef8bb964409157a97ee.html" target="_blank" class="article-title">出海电商，迎战欧盟最难合规“大考”</a>
-                    <p class="article-desc">目前DSA指定的23个“超大在线平台”监管名单里，已经有4家国内出海平台，而且全部都有电商业务。作为电商平台，最容易被关注的是违规商品问题，伤害最大的则是广告问题。</p>
-                </div>
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
             </div>
 
-            <!-- 第 4 篇 -->
-            <div class="article-item">
-                <div class="article-date">2024.4</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20240411/herald/467df6fbaa75ad85acfb6744ab861053.html" target="_blank" class="article-title">版权合作密集，AI公司的蛋糕分法</a>
-                    <p class="article-desc">有趣的是，在给美国知识产权局的回复函中，几乎所有AI大公司都否认了版权付费的合理性。大模型的训练过程到底能归类于版权法上的何种行为，还没有明确结论。</p>
-                </div>
-            </div>
+          </div>
+        </a>
+      </article>
 
-           
-
-        </div>
-    </section>
-
-    <!-- 3. 技术解读 (4篇) -->
-    <section class="section" id="ai">
-        <div class="section-header">
-            <h2 class="section-title">技术解读</h2>
-            <span class="section-eng">Technology Reports</span>
-        </div>
-        <div class="article-list">
-            <!-- 第 1 篇 -->
-            <div class="article-item">
-                <div class="article-date">2026.3</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20260224/herald/aa3efebf718749a130f4edfb8a2acff7.html" target="_blank" class="article-title">万字详解智能体2.0：AI的互联互通新战场</a>
-                    <p class="article-desc">未来智能体的壁垒，在于能打通多少个人设备，能互联多少服务。智能体想成为新的能力层，重组我们与设备和App的连接方式，改变行业生态格局。 
-
-</p>
-                </div>
-            </div>
-
-<!-- 第 2 篇 -->
-            <div class="article-item">
-                <div class="article-date">2025.3</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20250317/herald/6410c6c74c64a254bdc041898ecbd76c.html" target="_blank" class="article-title">万字详解智能体1.0：AI手机走“盲道”</a>
-                    <p class="article-desc">在AGI的宏大版图中，AI Agent（智能体）被视为关键一步。它不仅能聊天，还要做出实际行动，实现“从说到做”的进化。而手机是国内市场最广阔的登陆场，端侧厂商也是最早开始试水智能体的力量。</p>
-                </div>
-            </div>
-
-<!-- 第 3 篇 -->
-            <div class="article-item">
-                <div class="article-date">2026.09</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20260812/herald/6618e6b03b249446b5068aed1a0b9945_zaker.html" target="_blank" class="article-title">Claude全线加水印，AI的“文字指纹”没那么简单</a>
-                    <p class="article-desc"> 图片可以把水印藏进像素里，文件也可以套上数字签名，但聊天框里的纯文本？几乎没有可以隐藏水印的空间。这也是为什么AI文本的标识问题一直比图像更难解决。</p>
-                </div>
-            </div>
-
-<!-- 第 4 篇 -->
-            <div class="article-item">
-                <div class="article-date">2025.05</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20250507/3e6c059a462e55ba9645724ea2cde199.html" target="_blank" class="article-title">MCP火热 为什么互联网厂商不买账？</a>
-                    <p class="article-desc">MCP的首要价值便是统一性，好比春秋六国沟通受阻，统一标准才可能打通贸易往来。尽管它为AI智能体铺设了路基，但没有解决所有问题——标准如果无人使用，相当于一纸空文。</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- 4. 专访 (4篇) -->
-    <section class="section" id="interviews">
-        <div class="section-header">
-            <h2 class="section-title">专访</h2>
-            <span class="section-eng">INTERVIEWS</span>
-        </div>
-        <div class="article-list">
+      <!-- ===== 文章 3 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://m.sfccn.com/2023/12-11/xMMDE0NDlfMTg4MTcxMg.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
             
-            <div class="article-item">
-                <div class="article-date">2026.06</div>
-                <div class="article-content">
-                    <a href="https://mp.weixin.qq.com/s/NHm2pqpq5QFvaGXvBo06lg" target="_blank" class="article-title"> 对话金杜吴涵：欧盟连开巨额罚单之后，中企如何理解当下的数字监管</a>
-                    <p class="article-desc"></p>
-                </div>
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2023.11</span>
+              <!-- 【修改这里：标签 3】（复古暖姜黄） -->
+               <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EEF4F0] text-[#3D6950] font-medium border border-[#D7E5DC]">
+                #深度报道
+              </span>
             </div>
 
-            <div class="article-item">
-                <div class="article-date">2026.03</div>
-                <div class="article-content">
-                    <a href="https://www.21jingji.com/article/20250309/herald/b1d9f1f035fe8e491daab8012c14cdf1.html" target="_blank" class="article-title">专访最高法周加海：加强网暴治理 增加司法政策供给</a>
-                    <p class="article-desc"></p>
-                </div>
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 3】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover:transition-colors duration-200 leading-snug">
+                微信群里的PDF罪状录：吃瓜与恶的距离
+              </h2>
+              <!-- 【修改这里：简介 3】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                道德审判可以彰显自己的正义感，一旦人们找到了共同愤怒的群体，很容易让某些敏感信息的披露演变为一场网暴，吃瓜pdf文件正是一类缩影。我用了一个星期时间，通过telegram找到了一位海外瓜群组长，在他的复杂心态里看到了吃瓜文件的更多问题。
+              </p>
             </div>
 
-            <div class="article-item">
-                <div class="article-date">2026.03</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20260309/herald/cff26454f46d875da634ef135136422d.html" target="_blank" class="article-title">专访中科院张立波：智能体的决策过程，可能被解释吗？</a>
-                    <p class="article-desc"></p>
-                </div>
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
             </div>
 
-            <div class="article-item">
-                <div class="article-date">2023.12</div>
-                <div class="article-content">
-                    <a href="https://m.21jingji.com/article/20231201/herald/f538347bcff7e5959f642746ad69e7e1.html" target="_blank" class="article-title">专访社科院周辉：美国AI行政命令可能出现“华盛顿效应”</a>
-                    <p class="article-desc"></p>
-                </div>
-            </div>
+          </div>
+        </a>
+      </article>
 
-        </div>
-    </section>
-
-    <!-- 5. 测评报告 (4篇，瀑布流图片布局) -->
-    <section class="section" id="reports">
-        <div class="section-header">
-            <h2 class="section-title">测评报告</h2>
-            <span class="section-eng">INFORGRAPHIC & REPORTS</span>
-        </div>
-        
-        <div class="masonry-grid">
+      <!-- ===== 文章 4 ===== -->
+      <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://www.21jingji.com/article/20241129/herald/7e6e5cafc13c692b452ba1dafb7d897a.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
             
-            <!-- 第 1 篇 (无简介文字) -->
-            <!-- 🔴 替换说明：替换 href 链接 -->
-            <a href="https://m.21jingji.com/article/20250704/herald/e4005d92f7a5b67fef805a7f23858062.html" target="_blank" class="masonry-item">
-                <!-- 🔴 替换说明：替换 src 的配图 -->
-                <img src="images/ai安全.jpeg" alt="封面" class="masonry-img">
-                <!-- 🔴 替换说明：替换日期 -->
-                <span class="masonry-date">2025.7</span>
-                <!-- 🔴 替换说明：替换标题文字 -->
-                <h3 class="masonry-title">白皮书：AI智能体“体检”报告</h3>
-            </a>
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2024.11</span>
+              <!-- 【修改这里：标签 4】（干枯玫瑰粉） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#FBF0F2] text-[#9E3E53] font-medium border border-[#F4DBE1]">
+                #解释性报道
+              </span>
+            </div>
 
-            <!-- 第 2 篇 -->
-            <a href="#" target="_blank" class="masonry-item">
-                <img src="images/ai真实性.jpg" alt="图表" class="masonry-img">
-                <span class="masonry-date">2026.04</span>
-                <h3 class="masonry-title">内参：测评大模型幻觉和信息真实性</h3>
-            </a>
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 4】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                热搜上线第十年，为何争议仍不止不休？
+              </h2>
+              <!-- 【修改这里：简介 4】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                从心理学的角度来看，人类为了生存，有需要感知威胁、躲避危险的天性，这种“人性弱点”体现在社交平台上，便是暗含危险、愤怒的负性信息更容易获得公开互动。但语言暴力的边界难以界定，针对具体问题建立人工管理员或投票机制，也许是一种方法。
+              </p>
+            </div>
 
-            <!-- 第 3 篇 -->
-            <a href="https://m.21jingji.com/article/20250410/herald/6201d4e9c006bc70505ea99a082fab50.html" target="_blank" class="masonry-item">
-                <img src="images/ai幻觉.jpg" alt="图表" class="masonry-img">
-                <span class="masonry-date">2025.04</span>
-                <h3 class="masonry-title">测评：让AI查了330次新闻，准确性不足40%</h3>
-            </a>
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
 
-            <!-- 第 4 篇 -->
-            <a href="https://www.21jingji.com/article/20231122/herald/1b0a2ef92191268aedcf29cd72707466.html" target="_blank" class="masonry-item">
-                <img src="images/ai商业化.jpg" alt="插图" class="masonry-img">
-                <span class="masonry-date">2023.11</span>
-                <h3 class="masonry-title">测评：漩涡中的OpenAI和背后的商业化难题</h3>
-            </a>
+          </div>
+        </a>
+      </article>
 
-        </div>
+      <!-- ===== 文章 5 ===== -->
+       <article class="group py-7 sm:py-8 transition-all duration-200 hover:bg-white hover:shadow-md hover:shadow-stone-200/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl">
+        <a href="https://m.21jingji.com/article/20260730/herald/c56587b007bd5740134b2699ba86fbd1.html" target="_blank" class="block">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-start">
+            
+            <!-- 左侧：编号与彩色标签 -->
+            <div class="md:col-span-3 flex md:flex-col items-start gap-2.5">
+              <span class="font-mono-meta text-xs text-stone-400">2026.7</span>
+              <!-- 【修改这里：标签 5】（复古雾霾蓝） -->
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#EFF5F7] text-[#2F677A] font-medium border border-[#DAE8ED]">
+                #政策解读
+              </span>
+            </div>
+
+            <!-- 中间：标题与简介 -->
+            <div class="md:col-span-8">
+              <!-- 【修改这里：标题 5】 -->
+              <h2 class="text-lg sm:text-xl font-semibold text-stone-900 group-hover: transition-colors duration-200 leading-snug">
+                反网络暴力法终于要来了，处罚最高可达一千万元
+              </h2>
+              <!-- 【修改这里：简介 5】 -->
+              <p class="text-stone-600 text-sm sm:text-base mt-2.5 leading-relaxed font-normal">
+                反网暴法用了较大篇幅明确网络平台（“网络服务提供者”）在治理网络暴力中的责任，我们梳理了5点。不过在实践中，对于评论、转发的公开场景，多数平台仍未提供便捷的取证工具。如果需要进一步调取涉事账号信息、传播路径等数据，也缺少专门的操作入口。
+
+
+              </p>
+            </div>
+
+            <!-- 右侧：悬停动态箭头 -->
+            <div class="hidden md:flex md:col-span-1 justify-end pt-1">
+              <span class="text-xl text-stone-300 group-hover:text-[#C85A32] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-200">
+                ↗
+              </span>
+            </div>
+
+          </div>
+        </a>
+      </article>
+
     </section>
-<!-- 专属底部版权小字 -->
-    <footer class="site-footer">
-        Built by Xiao with cats, coffee and Gemini AI 🤖
-    </footer>
 
-    <!-- 🔴 JavaScript：实现滚动时胶囊导航栏自动切换颜色，无需修改 -->
-    <script>
-        const sections = document.querySelectorAll('.section, .hero');
-        const navLinks = document.querySelectorAll('.capsule-nav a');
+  </main>
 
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
+  <!-- ========================================== -->
+  <!-- 4. 底部 Footer（宽度对齐作品集、内容居中） -->
+  <!-- ========================================== -->
+  <footer class="w-full border-t border-stone-200/80 py-12 px-6 sm:px-12 lg:px-16 bg-[#FAF8F5]">
+    <div class="max-w-6xl mx-auto text-center text-xs text-stone-400 font-mono-meta tracking-wide">
+      built by <span class="text-stone-700 font-medium">xiao</span>, 
+      <span class="text-[#C85A32] font-medium">cats 🐾</span> and 
+      <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-medium">gemini AI</span>.
+    </div>
+  </footer>
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current) && current !== '') {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
